@@ -23,7 +23,7 @@ public class Snake extends JPanel implements KeyListener {
         public void actionPerformed(ActionEvent actionEvent) {
         }
     };
-    javax.swing.Timer timer = new Timer(1000,gameTime);
+    javax.swing.Timer timer = new Timer(140,gameTime);
 
     public Snake(){
         blocks = new ArrayList<>();
@@ -37,7 +37,13 @@ public class Snake extends JPanel implements KeyListener {
         super.paintComponent(g);
 
         for(int i=0;i<blocks.size();i++){
-            g.setColor(Color.RED);
+            if(i==0){
+                g.setColor(Color.GREEN);
+            }else{
+                g.setColor(Color.RED);
+            }
+
+
             g.fillRect(blocks.get(i).x,blocks.get(i).y,10,10);
             System.out.println("i: " +i+ " " + "x: " +blocks.get(i).x+ " " + "y: " +blocks.get(i).y);
         }
@@ -45,11 +51,7 @@ public class Snake extends JPanel implements KeyListener {
         g.setColor(Color.BLUE);
         g.fillRect(foodx,foody,10,10);
 
-        if((blocks.get(0).x-10 == foodx || blocks.get(0).x+10 == foodx) && ((blocks.get(0).y >=foody-8 && blocks.get(0).y <= foody+8) || blocks.get(0).y==foody)){
-            foodx = this.randomize();
-            foody = this.randomize();
-
-        }else if((blocks.get(0).y-10 == foody || blocks.get(0).y+10 == foody) && ((blocks.get(0).x >=foodx-8 && blocks.get(0).x <= foodx+8) || blocks.get(0).x==foodx)){
+        if(isCollided()){
             foodx = this.randomize();
             foody = this.randomize();
         }
@@ -60,7 +62,17 @@ public class Snake extends JPanel implements KeyListener {
     public void redraw(){
         this.repaint();
     }
+    public boolean isCollided(){
+        if((blocks.get(0).x-10 == foodx || blocks.get(0).x+10 == foodx) && ((blocks.get(0).y >=foody-8 && blocks.get(0).y <= foody+8) || blocks.get(0).y==foody)){
+            return true;
 
+        }else if((blocks.get(0).y-10 == foody || blocks.get(0).y+10 == foody) && ((blocks.get(0).x >=foodx-8 && blocks.get(0).x <= foodx+8) || blocks.get(0).x==foodx)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     @Override
     public void keyTyped(KeyEvent keyEvent) {
     }
@@ -76,14 +88,16 @@ public class Snake extends JPanel implements KeyListener {
                     if(blocks.get(0).x >=500){
                         timer.stop();
                     }else{
-                            int temp = blocks.get(0).x;
+                            int tempx = blocks.get(0).x;
+                            int tempy = blocks.get(0).y;
                             Collections.rotate(blocks,1);
-                            blocks.get(0).x = temp + 10;
+                            blocks.get(0).x = tempx + 10;
+                            blocks.get(0).y = tempy;
                         redraw();
                     }
                 }
             };
-            timer = new Timer(10,gameTime);
+            timer = new Timer(140,gameTime);
             timer.start();
         }else if (keyEvent.getKeyCode() == 37){
             timer.stop();
@@ -93,15 +107,17 @@ public class Snake extends JPanel implements KeyListener {
                     if(blocks.get(0).x <=0){
                         timer.stop();
                     }else {
-                        int temp = blocks.get(0).x;
+                        int tempx = blocks.get(0).x;
+                        int tempy = blocks.get(0).y;
                             Collections.rotate(blocks,1);
-                            blocks.get(0).x= temp - 10;
+                            blocks.get(0).x= tempx - 10;
+                            blocks.get(0).y = tempy;
 
                         redraw();
                     }
                 }
             };
-            timer = new Timer(10,gameTime);
+            timer = new Timer(140,gameTime);
             timer.start();
         }else if (keyEvent.getKeyCode() == 38){
             timer.stop();
@@ -111,15 +127,17 @@ public class Snake extends JPanel implements KeyListener {
                     if(blocks.get(0).y <=0){
                         timer.stop();
                     }else {
-                        int temp = blocks.get(0).y;
+                        int tempy= blocks.get(0).y;
+                        int tempx = blocks.get(0).x;
                         Collections.rotate(blocks,1);
-                            blocks.get(0).y= temp - 10;
+                            blocks.get(0).y= tempy - 10;
+                            blocks.get(0).x = tempx;
 
                         redraw();
                     }
                 }
             };
-            timer = new Timer(10,gameTime);
+            timer = new Timer(140,gameTime);
             timer.start();
         }else if (keyEvent.getKeyCode() == 40){
             timer.stop();
@@ -129,15 +147,16 @@ public class Snake extends JPanel implements KeyListener {
                     if(blocks.get(0).y >=500){
                         timer.stop();
                     }else {
-                        int temp = blocks.get(0).y;
+                        int tempy = blocks.get(0).y;
+                        int tempx = blocks.get(0).x;
                         Collections.rotate(blocks,1);
-                            blocks.get(0).y= temp + 10;
-
+                            blocks.get(0).y= tempy + 10;
+                            blocks.get(0).x = tempx;
                         redraw();
                     }
                 }
             };
-            timer = new Timer(10,gameTime);
+            timer = new Timer(140,gameTime);
             timer.start();
         }
     }
